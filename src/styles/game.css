@@ -1,0 +1,11 @@
+:root{
+  --parchment: rgba(242,230,201,0.75);
+  --ink: rgba(0,0,0,0.82);
+  --border: rgba(0,0,0,0.18);
+}
+body{
+  margin:0;
+  color: var(--ink);
+  background: linear-gradient(135deg, rgba(242,230,201,0.9), rgba(225,207,170,0.75));
+}
+a{ color: inherit; }

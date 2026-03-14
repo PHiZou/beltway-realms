@@ -1,0 +1,113 @@
+---
+import "../../../styles/game.css";
+import HUD from "../../../components/game/HUD";
+import DiscoverRegion from "../../../components/game/DiscoverRegion";
+import RegionCrest from "../../../components/game/RegionCrest";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+import mapData from "../../../data/map.nova-dc.json";
+
+const { id } = Astro.params;
+if (!id) throw new Error("Missing region id");
+
+type Region = {
+  id: string;
+  name: string;
+  lore: string;
+  themeTags?: string[];
+  quests?: string[];
+  boss?: string | null;
+  icon?: string;
+};
+
+type Route = { from: string; to: string; type: string };
+
+const regions = (mapData as any).regions as Region[];
+const routes = (mapData as any).routes as Route[];
+const region = regions.find((r) => r.id === id);
+
+if (!region) {
+  return Astro.redirect("/game/map");
+}
+
+const neighborIds = new Set<string>();
+for (const r of routes) {
+  if (r.from === region.id) neighborIds.add(r.to);
+  if (r.to === region.id) neighborIds.add(r.from);
+}
+const neighbors = Array.from(neighborIds)
+  .map((nid) => regions.find((r) => r.id === nid))
+  .filter(Boolean)
+  .map((r) => ({ id: (r as Region).id, name: (r as Region).name }));
+
+const allQuests = (await getCollection("quests")) as CollectionEntry<"quests">[];
+const regionQuestIds = new Set(region.quests ?? []);
+const quests = allQuests
+  .filter((q) => regionQuestIds.has(q.data.id))
+  .sort((a, b) => (region.quests!.indexOf(a.data.id) - region.quests!.indexOf(b.data.id)));
+
+const bossId = region.boss ?? null;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{region.name} | The Beltway Realms</title>
+  </head>
+  <body>
+    <HUD client:load />
+    <DiscoverRegion id={region.id} client:load />
+
+    <main class="wrap">
+      <a class="back" href="/game/map">← Back to Map</a>
+
+      <RegionCrest
+        name={region.name}
+        lore={region.lore}
+        icon={region.icon}
+        tags={region.themeTags}
+        neighbors={neighbors}
+        bossId={bossId}
+        client:load
+      />
+
+      <section class="quest-list">
+        <h2>Quests</h2>
+
+        {quests.length ? (
+          <ul class="quests">
+            {quests.map((q) => (
+              <li class="quest">
+                <a href={`/game/quests/${q.slug}`}>
+                  <div class="quest-title">{q.data.title}</div>
+                  <div class="quest-meta">
+                    <span>{q.data.difficulty}</span>
+                    <span class="dot">•</span>
+                    <span>{(q.data.tags ?? []).slice(0, 3).join(", ")}</span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="empty">No quests found for this region yet.</p>
+        )}
+      </section>
+    </main>
+
+    <style>
+      .wrap { max-width: 980px; margin: 0 auto; padding: 18px 18px 44px; }
+      .back { display: inline-block; margin-bottom: 12px; opacity: 0.8; font-family: serif; }
+      h2 { font-family: serif; margin-top: 22px; }
+      .quest-list { margin-top: 18px; }
+      .quests { list-style: none; padding: 0; display: grid; gap: 12px; margin: 0; }
+      .quest a { display: block; padding: 14px 14px; border: 1px solid rgba(0,0,0,0.18); border-radius: 14px; text-decoration: none; background: rgba(242,230,201,0.45); }
+      .quest-title { font-weight: 800; font-family: serif; color: rgba(0,0,0,0.85); }
+      .quest-meta { margin-top: 6px; opacity: 0.75; font-size: 0.92rem; font-family: serif; }
+      .dot { margin: 0 8px; opacity: 0.6; }
+      .empty { font-family: serif; opacity: 0.7; }
+    </style>
+  </body>
+</html>

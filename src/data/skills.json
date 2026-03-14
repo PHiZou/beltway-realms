@@ -1,0 +1,40 @@
+{
+  "meta": { "id": "skills-v1", "version": 1 },
+  "nodes": [
+    { "id": "s_systems_thinking", "name": "Systems Thinking", "tier": 1, "category": "Core" },
+    { "id": "s_data_modeling", "name": "Data Modeling", "tier": 1, "category": "Core" },
+    { "id": "s_sql_mastery", "name": "SQL Mastery", "tier": 1, "category": "Core" },
+
+    { "id": "s_lakehouse", "name": "Lakehouse Foundations", "tier": 2, "category": "Data Engineering" },
+    { "id": "s_streaming", "name": "Streaming Pipelines", "tier": 2, "category": "Data Engineering" },
+    { "id": "s_orchestration", "name": "Orchestration & Automation", "tier": 2, "category": "Data Engineering" },
+
+    { "id": "s_observability", "name": "Observability", "tier": 3, "category": "Platform" },
+    { "id": "s_security", "name": "Security & Governance", "tier": 3, "category": "Platform" },
+    { "id": "s_cost_perf", "name": "Cost & Performance", "tier": 3, "category": "Platform" },
+
+    { "id": "s_agents", "name": "LLM Agents", "tier": 3, "category": "AI Systems" },
+    { "id": "s_rag", "name": "RAG & Knowledge Vaults", "tier": 3, "category": "AI Systems" },
+
+    { "id": "s_energy_infra", "name": "Energy + Data Center Intelligence", "tier": 4, "category": "Endgame" }
+  ],
+  "edges": [
+    { "from": "s_systems_thinking", "to": "s_lakehouse" },
+    { "from": "s_sql_mastery", "to": "s_data_modeling" },
+    { "from": "s_data_modeling", "to": "s_lakehouse" },
+
+    { "from": "s_lakehouse", "to": "s_orchestration" },
+    { "from": "s_orchestration", "to": "s_observability" },
+    { "from": "s_orchestration", "to": "s_security" },
+
+    { "from": "s_lakehouse", "to": "s_streaming" },
+    { "from": "s_streaming", "to": "s_cost_perf" },
+
+    { "from": "s_orchestration", "to": "s_agents" },
+    { "from": "s_agents", "to": "s_rag" },
+
+    { "from": "s_cost_perf", "to": "s_energy_infra" },
+    { "from": "s_security", "to": "s_energy_infra" },
+    { "from": "s_rag", "to": "s_energy_infra" }
+  ]
+}

@@ -1,0 +1,30 @@
+---
+import "../../styles/game.css";
+import HUD from "../../components/game/HUD";
+import skills from "../../data/skills.json";
+const nodes = (skills as any).nodes ?? [];
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Skill Tree | The Beltway Realms</title>
+  </head>
+  <body>
+    <HUD client:load />
+    <main style="max-width: 980px; margin: 0 auto; padding: 18px 18px 48px;">
+      <h1 style="font-family: serif; font-size: 40px; margin: 10px 0 8px;">Skill Tree</h1>
+      <p style="font-family: serif; opacity: 0.8; margin: 0 0 16px;">
+        Placeholder list. Next: render as an interactive tree.
+      </p>
+      <div style="display:grid; gap: 10px;">
+        {nodes.map((n) => (
+          <div style="border: 1px solid rgba(0,0,0,0.18); border-radius: 14px; padding: 12px; background: rgba(242,230,201,0.45); font-family: serif;">
+            <div style="font-weight: 900; opacity: 0.85;">{n.name}</div>
+            <div style="opacity: 0.7;">{n.category} • Tier {n.tier}</div>
+          </div>
+        ))}
+      </div>
+    </main>
+  </body>
+</html>

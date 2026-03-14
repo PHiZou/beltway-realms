@@ -1,0 +1,179 @@
+---
+import "../../../styles/game.css";
+import HUD from "../../../components/game/HUD";
+import QuestCompletion from "../../../components/game/QuestCompletion";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+import mapData from "../../../data/map.nova-dc.json";
+import skillsData from "../../../data/skills.json";
+
+const { slug } = Astro.params;
+if (!slug) throw new Error("Missing quest slug");
+
+const quests = await getCollection("quests");
+const quest = quests.find((q) => q.slug === slug);
+
+if (!quest) {
+  return Astro.redirect("/game/map");
+}
+
+type Region = { id: string; name: string };
+const regions = (mapData as any).regions as Region[];
+const regionId = quest.data.region as string;
+const region = regions.find((r) => r.id === regionId);
+
+type SkillNode = { id: string; name: string; category?: string; tier?: number };
+const skillNodes = ((skillsData as any).nodes as SkillNode[]) ?? [];
+
+const rewards: string[] = (quest.data.rewards ?? []) as string[];
+const rewardSkills = rewards
+  .map((rid) => skillNodes.find((s) => s.id === rid))
+  .filter(Boolean) as SkillNode[];
+
+const demo = quest.data.links?.demo ?? "";
+const github = quest.data.links?.github ?? "";
+
+const difficulty = quest.data.difficulty ?? "Medium";
+const tags: string[] = quest.data.tags ?? [];
+
+const questId = quest.data.id as string;
+const xpAward =
+  difficulty.toLowerCase().includes("boss") ? 120 :
+  difficulty.toLowerCase().includes("hard") ? 60 :
+  difficulty.toLowerCase().includes("medium") ? 35 :
+  20;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{quest.data.title} | Quest Log</title>
+  </head>
+
+  <body>
+    <HUD client:load />
+
+    <main class="wrap">
+      <nav class="crumbs">
+        <a href="/game/map">Map</a>
+        <span class="sep">›</span>
+        {region ? <a href={`/game/regions/${region.id}`}>{region.name}</a> : <span>Unknown Region</span>}
+        <span class="sep">›</span>
+        <span class="current">Quest Log</span>
+      </nav>
+
+      <header class="quest-header">
+        <div class="title-row">
+          <h1>{quest.data.title}</h1>
+          <span class="badge">{difficulty}</span>
+        </div>
+
+        {tags.length ? (
+          <ul class="tags">
+            {tags.map((t) => <li class="tag">{t}</li>)}
+          </ul>
+        ) : null}
+
+        <div class="links">
+          {github ? <a class="link" href={github} target="_blank" rel="noreferrer">GitHub</a> : null}
+          {demo ? <a class="link" href={demo} target="_blank" rel="noreferrer">Demo</a> : null}
+          {region ? <a class="link" href={`/game/regions/${region.id}`}>Return to Region</a> : <a class="link" href="/game/map">Return to Map</a>}
+        </div>
+      </header>
+
+      <section class="grid">
+        <article class="journal">
+          <div class="journal-inner">
+            <div class="ink">
+              <quest.Content />
+            </div>
+          </div>
+        </article>
+
+        <aside class="side">
+          <section class="panel">
+            <div class="panel-title">Progress</div>
+            <QuestCompletion questId={questId} xpAward={xpAward} client:load />
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">Quest Rewards</div>
+
+            {rewardSkills.length ? (
+              <ul class="rewards">
+                {rewardSkills.map((s) => (
+                  <li class="reward">
+                    <div class="reward-name">{s.name}</div>
+                    <div class="reward-meta">
+                      {s.category ? <span>{s.category}</span> : null}
+                      {typeof s.tier === "number" ? <span class="dot">•</span> : null}
+                      {typeof s.tier === "number" ? <span>Tier {s.tier}</span> : null}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="muted">No rewards recorded yet. Add <code>rewards</code> in frontmatter to show unlocked skills.</p>
+            )}
+          </section>
+
+          <section class="panel">
+            <div class="panel-title">Field Notes</div>
+            <ul class="notes">
+              <li>Keep sections concise: objective → approach → outcome.</li>
+              <li>Prefer diagrams and tradeoffs over buzzwords.</li>
+              <li>End with “Next Upgrade” to show momentum.</li>
+            </ul>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <style>
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 18px 18px 48px; }
+
+      .crumbs { font-family: serif; opacity: 0.75; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .crumbs a { text-decoration: none; color: rgba(0,0,0,0.75); }
+      .sep { opacity: 0.5; }
+      .current { opacity: 0.85; font-weight: 700; }
+
+      .quest-header { margin-top: 12px; padding: 16px; border: 1px solid rgba(0,0,0,0.18); border-radius: 18px; background: rgba(242,230,201,0.55); }
+      .title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+      h1 { font-family: serif; font-size: 38px; margin: 0; color: rgba(0,0,0,0.86); }
+
+      .badge { font-family: serif; font-weight: 800; border: 1px solid rgba(0,0,0,0.22); border-radius: 999px; padding: 6px 12px; opacity: 0.8; background: rgba(242,230,201,0.7); }
+
+      .tags { list-style: none; padding: 0; margin: 12px 0 0; display: flex; gap: 8px; flex-wrap: wrap; }
+      .tag { font-family: serif; border: 1px solid rgba(0,0,0,0.18); border-radius: 999px; padding: 4px 10px; opacity: 0.82; }
+
+      .links { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+      .link { font-family: serif; text-decoration: none; border: 1px solid rgba(0,0,0,0.22); border-radius: 12px; padding: 8px 12px; color: rgba(0,0,0,0.78); background: rgba(242,230,201,0.6); }
+
+      .grid { margin-top: 18px; display: grid; grid-template-columns: 1.8fr 1fr; gap: 16px; }
+      @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+
+      .journal { border: 1px solid rgba(0,0,0,0.18); border-radius: 18px; overflow: hidden; background: rgba(242,230,201,0.45); }
+      .journal-inner { padding: 18px; }
+      .ink { font-family: serif; color: rgba(0,0,0,0.82); line-height: 1.55; font-size: 1.05rem; }
+      .ink h2 { margin-top: 18px; font-size: 1.35rem; }
+      .ink h3 { margin-top: 14px; font-size: 1.15rem; }
+      .ink code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.95em; }
+      .ink a { color: rgba(0,0,0,0.8); }
+
+      .side { display: grid; gap: 16px; align-content: start; }
+      .panel { border: 1px solid rgba(0,0,0,0.18); border-radius: 18px; padding: 14px; background: rgba(242,230,201,0.55); }
+      .panel-title { font-family: serif; font-weight: 900; opacity: 0.8; margin-bottom: 10px; }
+
+      .rewards { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+      .reward { border: 1px solid rgba(0,0,0,0.16); border-radius: 14px; padding: 10px 12px; background: rgba(242,230,201,0.5); }
+      .reward-name { font-family: serif; font-weight: 900; opacity: 0.85; }
+      .reward-meta { margin-top: 4px; font-family: serif; opacity: 0.7; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+      .dot { opacity: 0.5; }
+
+      .notes { margin: 0; padding-left: 18px; font-family: serif; opacity: 0.78; }
+      .muted { font-family: serif; opacity: 0.75; }
+    </style>
+  </body>
+</html>

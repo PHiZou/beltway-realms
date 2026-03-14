@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "id": "nova-dc-parchment-v1",
+    "title": "The Beltway Realms",
+    "style": "parchment",
+    "version": 1
+  },
+  "viewport": { "width": 1200, "height": 800 },
+  "regions": [
+    {
+      "id": "citadel_dc",
+      "name": "The Citadel (Washington, D.C.)",
+      "lore": "Where institutions are oldest and requirements are written in stone. Mission systems rule these streets.",
+      "x": 585,
+      "y": 355,
+      "radius": 64,
+      "icon": "citadel",
+      "themeTags": ["govcon", "mission", "stakeholders"],
+      "quests": ["quest_mission_ready_data"],
+      "boss": "boss_citadel"
+    },
+    {
+      "id": "pentagon_bastion",
+      "name": "Pentagon Bastion",
+      "lore": "A fortress of logistics and reliability. What breaks here breaks loudly.",
+      "x": 510,
+      "y": 392,
+      "radius": 52,
+      "icon": "bastion",
+      "themeTags": ["reliability", "operations", "auditability"],
+      "quests": ["quest_supply_chain_signal"],
+      "boss": null
+    },
+    {
+      "id": "arlington_nexus",
+      "name": "Arlington Nexus",
+      "lore": "The crossroads of talent and tempo. Systems converge here before they spread across the realms.",
+      "x": 525,
+      "y": 360,
+      "radius": 50,
+      "icon": "nexus",
+      "themeTags": ["modernization", "integration", "delivery"],
+      "quests": ["quest_portfolio_rpg_foundation"],
+      "boss": null
+    },
+    {
+      "id": "alexandria_archives",
+      "name": "Alexandria Archives",
+      "lore": "A library of patterns and proof. The Vault lives beneath these quiet streets.",
+      "x": 540,
+      "y": 430,
+      "radius": 44,
+      "icon": "archives",
+      "themeTags": ["research", "writing", "knowledge_graph"],
+      "quests": ["quest_research_vault"],
+      "boss": null
+    },
+    {
+      "id": "tysons_spires",
+      "name": "Tysons Spires",
+      "lore": "Glass towers and legacy contracts. Here, systems are refactored without waking the dragon.",
+      "x": 455,
+      "y": 330,
+      "radius": 52,
+      "icon": "spires",
+      "themeTags": ["enterprise", "consulting", "migration"],
+      "quests": ["quest_enterprise_migration_playbook"],
+      "boss": null
+    },
+    {
+      "id": "reston_node",
+      "name": "Reston Node",
+      "lore": "A settlement built for builders. Prototypes become products, and products become platforms.",
+      "x": 360,
+      "y": 310,
+      "radius": 48,
+      "icon": "node",
+      "themeTags": ["product", "platform", "observability"],
+      "quests": ["quest_streaming_pipeline"],
+      "boss": null
+    },
+    {
+      "id": "herndon_gate",
+      "name": "Herndon Gate",
+      "lore": "A narrow pass where data enters and leaves the Beltway Realms. Latency is the toll.",
+      "x": 300,
+      "y": 330,
+      "radius": 44,
+      "icon": "gate",
+      "themeTags": ["networking", "edge", "throughput"],
+      "quests": ["quest_event_bridge_of_rivers"],
+      "boss": null
+    },
+    {
+      "id": "ashburn_dominion",
+      "name": "Ashburn Data Dominion",
+      "lore": "The kingdom of humming racks. Power is law. Cooling is mercy. Compute is destiny.",
+      "x": 185,
+      "y": 320,
+      "radius": 70,
+      "icon": "dominion",
+      "themeTags": ["datacenters", "energy", "scale"],
+      "quests": ["quest_energy_infrastructure_intel", "quest_lakehouse_foundations"],
+      "boss": "boss_ashburn"
+    },
+    {
+      "id": "potomac_divide",
+      "name": "The Potomac Divide",
+      "lore": "A river that separates domains and disciplines. Crossing it requires governance, not courage.",
+      "x": 585,
+      "y": 410,
+      "radius": 80,
+      "icon": "river",
+      "themeTags": ["governance", "security", "boundaries"],
+      "quests": ["quest_data_governance_rituals"],
+      "boss": null
+    }
+  ],
+  "routes": [
+    { "from": "citadel_dc", "to": "arlington_nexus", "type": "road" },
+    { "from": "arlington_nexus", "to": "pentagon_bastion", "type": "road" },
+    { "from": "arlington_nexus", "to": "tysons_spires", "type": "road" },
+    { "from": "tysons_spires", "to": "reston_node", "type": "road" },
+    { "from": "reston_node", "to": "herndon_gate", "type": "road" },
+    { "from": "herndon_gate", "to": "ashburn_dominion", "type": "road" },
+    { "from": "citadel_dc", "to": "alexandria_archives", "type": "road" }
+  ],
+  "fogOfWar": {
+    "enabled": true,
+    "defaultDiscovered": ["arlington_nexus", "citadel_dc"]
+  }
+}
