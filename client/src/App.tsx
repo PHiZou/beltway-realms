@@ -81,6 +81,8 @@ function App() {
       <footer className="br-footer">
         <span>Local-only MVP. No accounts, no servers.</span>
         <span className="br-footer-dot">•</span>
+        <span title="Build identifier">v2</span>
+        <span className="br-footer-dot">•</span>
         <span>Built for quick reskinning and iteration.</span>
         <span className="br-footer-dot">•</span>
         <button
