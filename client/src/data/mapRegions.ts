@@ -15,29 +15,28 @@ export type MapRegionMeta = {
 export const mapRegions: MapRegionMeta[] = [
   {
     id: 'ashburn',
-    // Roughly matches the Ashburn label / marker cluster in the SVG
-    xPercent: 16,
-    yPercent: 42,
+    xPercent: 12.5,
+    yPercent: 42.5,
   },
   {
     id: 'reston',
-    xPercent: 27,
-    yPercent: 40,
+    xPercent: 28.75,
+    yPercent: 37.25,
   },
   {
     id: 'tysons',
-    xPercent: 36,
-    yPercent: 39,
+    xPercent: 45,
+    yPercent: 35.6,
   },
   {
     id: 'arlington',
-    xPercent: 46,
-    yPercent: 43,
+    xPercent: 58.3,
+    yPercent: 48.1,
   },
   {
     id: 'citadel',
-    xPercent: 55,
-    yPercent: 41,
+    xPercent: 78.3,
+    yPercent: 37.5,
   },
 ]
 

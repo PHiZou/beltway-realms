@@ -26,6 +26,20 @@ function getRegionStatus(
   return 'available'
 }
 
+const statusLabel: Record<string, string> = {
+  complete: 'Complete',
+  available: 'Available',
+  locked: 'Locked',
+  'coming-soon': 'Coming soon',
+}
+
+const statusChipClass: Record<string, string> = {
+  complete: 'skill',
+  available: 'quest',
+  locked: 'dialogue',
+  'coming-soon': 'insight',
+}
+
 export function WorldMap() {
   const navigate = useNavigate()
   const [hoveredId, setHoveredId] = useState<string | null>(null)
@@ -38,8 +52,8 @@ export function WorldMap() {
   const activeStatus = activeId ? getRegionStatus(activeId, completedQuestIds) : null
 
   return (
-    <div className="br-map-shell">
-      <div className="br-map-surface">
+    <div className="br-map-full">
+      <div className="br-map-canvas">
         <div className="br-map-parchment">
           <img
             src="/img/maps/beltway-realms.svg"
@@ -76,7 +90,6 @@ export function WorldMap() {
                 aria-label={region.name}
               >
                 <span className="br-map-marker-dot" />
-                <span className="br-map-marker-label">{region.mapLabel}</span>
                 {status === 'complete' && <span className="br-map-marker-check">{'\u2713'}</span>}
                 {status === 'locked' && <span className="br-map-marker-lock">{'\uD83D\uDD12'}</span>}
               </button>
@@ -85,57 +98,35 @@ export function WorldMap() {
         </div>
       </div>
 
-      <aside className="br-map-preview">
-        {activeRegion ? (
-          <>
-            <div className="br-panel-title">
-              Realm preview
-              {activeStatus && (
-                <span
-                  className={`br-chip ${
-                    activeStatus === 'complete' ? 'skill' :
-                    activeStatus === 'available' ? 'quest' :
-                    activeStatus === 'locked' ? 'dialogue' :
-                    'insight'
-                  }`}
-                  style={{ marginLeft: '0.5rem', textTransform: 'capitalize' }}
-                >
-                  {activeStatus === 'coming-soon' ? 'Coming soon' : activeStatus}
-                </span>
-              )}
-            </div>
-            <div className="br-panel-subtitle">{activeRegion.name}</div>
-            <p className="br-lore-body" style={{ marginBottom: '0.5rem' }}>
-              {activeRegion.flavor}
-            </p>
-            {activeStatus === 'complete' && (
-              <p className="br-muted" style={{ color: '#4ade80' }}>
-                All encounters completed. Click to revisit.
-              </p>
+      {/* Floating preview overlay */}
+      {activeRegion && (
+        <div className="br-map-overlay">
+          <div className="br-map-overlay-header">
+            <span className="br-map-overlay-name">{activeRegion.name}</span>
+            {activeStatus && (
+              <span className={`br-chip ${statusChipClass[activeStatus]}`}>
+                {statusLabel[activeStatus]}
+              </span>
             )}
-            {activeStatus === 'locked' && activeRegion.prerequisiteRegionId && (
-              <p className="br-muted" style={{ color: '#fbbf24' }}>
-                Complete {getRegionById(activeRegion.prerequisiteRegionId)?.name ?? 'the prerequisite region'} first.
-              </p>
-            )}
-            {activeStatus === 'coming-soon' && (
-              <p className="br-muted" style={{ color: '#f472b6' }}>
-                Encounters not yet built for this region.
-              </p>
-            )}
-            {activeStatus === 'available' && (
-              <p className="br-muted">
-                Click to enter the region and begin encounters.
-              </p>
-            )}
-          </>
-        ) : (
-          <>
-            <div className="br-panel-title">Realm preview</div>
-            <p className="br-muted">Hover or select a realm marker on the map.</p>
-          </>
-        )}
-      </aside>
+          </div>
+          <p className="br-map-overlay-tagline">{activeRegion.tagline}</p>
+          {activeStatus === 'complete' && (
+            <span className="br-map-overlay-hint" style={{ color: '#5ee9ad' }}>
+              All encounters completed. Click to revisit.
+            </span>
+          )}
+          {activeStatus === 'locked' && activeRegion.prerequisiteRegionId && (
+            <span className="br-map-overlay-hint" style={{ color: '#fbbf24' }}>
+              Complete {getRegionById(activeRegion.prerequisiteRegionId)?.name} first.
+            </span>
+          )}
+          {activeStatus === 'coming-soon' && (
+            <span className="br-map-overlay-hint" style={{ color: '#ff8fab' }}>
+              Encounters coming soon.
+            </span>
+          )}
+        </div>
+      )}
     </div>
   )
 }

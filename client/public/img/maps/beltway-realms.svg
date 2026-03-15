@@ -9,80 +9,167 @@
     </filter>
 
     <linearGradient id="parchment" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f2e6c9"/>
+      <stop offset="0%" stop-color="#f5ead2"/>
+      <stop offset="50%" stop-color="#ede0c4"/>
       <stop offset="100%" stop-color="#e1cfaa"/>
     </linearGradient>
+
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b6a8c"/>
+      <stop offset="100%" stop-color="#2b5070"/>
+    </linearGradient>
+
+    <pattern id="terrain" width="80" height="80" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="#c4a87a" opacity="0.3"/>
+      <circle cx="60" cy="50" r="1" fill="#c4a87a" opacity="0.2"/>
+      <circle cx="40" cy="70" r="0.8" fill="#c4a87a" opacity="0.25"/>
+    </pattern>
   </defs>
 
+  <!-- Parchment background -->
   <rect x="0" y="0" width="1200" height="800" fill="url(#parchment)"/>
-  <rect x="24" y="24" width="1152" height="752" fill="none" stroke="#7a5b2b" stroke-width="3" opacity="0.7"/>
+  <rect x="0" y="0" width="1200" height="800" fill="url(#terrain)"/>
 
-  <g opacity="0.25">
-    <circle cx="1040" cy="130" r="52" fill="none" stroke="#3a2a12" stroke-width="2"/>
-    <path d="M1040 70 L1052 130 L1040 190 L1028 130 Z" fill="#3a2a12"/>
-    <path d="M980 130 L1040 118 L1100 130 L1040 142 Z" fill="#3a2a12"/>
+  <!-- Decorative border -->
+  <rect x="20" y="20" width="1160" height="760" fill="none" stroke="#8a6b3b" stroke-width="2" opacity="0.5" rx="4"/>
+  <rect x="26" y="26" width="1148" height="748" fill="none" stroke="#8a6b3b" stroke-width="1" opacity="0.3" rx="2"/>
+
+  <!-- Compass rose (top-right) -->
+  <g opacity="0.2" transform="translate(1080, 120)">
+    <circle cx="0" cy="0" r="48" fill="none" stroke="#3a2a12" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="38" fill="none" stroke="#3a2a12" stroke-width="0.5"/>
+    <path d="M0 -52 L6 0 L0 52 L-6 0 Z" fill="#3a2a12"/>
+    <path d="M-52 0 L0 -6 L52 0 L0 6 Z" fill="#3a2a12"/>
+    <path d="M0 -52 L-6 0 L0 52" fill="#5a4520"/>
+    <path d="M-52 0 L0 6 L52 0" fill="#5a4520"/>
+    <text x="0" y="-58" text-anchor="middle" font-family="serif" font-size="12" fill="#3a2a12">N</text>
   </g>
 
-  <path d="M720 760
-           C690 650, 770 590, 720 500
-           C670 410, 730 360, 690 290
-           C650 220, 720 160, 670 60"
-        fill="none" stroke="#2b4d66" stroke-width="16" opacity="0.35"/>
-  <path d="M720 760
-           C690 650, 770 590, 720 500
-           C670 410, 730 360, 690 290
-           C650 220, 720 160, 670 60"
-        fill="none" stroke="#2b4d66" stroke-width="6" opacity="0.45"/>
+  <!-- The Potomac Divide - a wider, more prominent river east of Arlington -->
+  <path d="M820 0
+           C810 80, 840 150, 820 220
+           C800 290, 830 340, 810 400
+           C790 460, 820 510, 800 570
+           C780 630, 810 690, 790 800"
+        fill="none" stroke="url(#water)" stroke-width="28" opacity="0.25" stroke-linecap="round"/>
+  <path d="M820 0
+           C810 80, 840 150, 820 220
+           C800 290, 830 340, 810 400
+           C790 460, 820 510, 800 570
+           C780 630, 810 690, 790 800"
+        fill="none" stroke="url(#water)" stroke-width="8" opacity="0.4" stroke-linecap="round"/>
 
-  <g stroke="#5a3f1b" stroke-width="4" opacity="0.55" fill="none">
-    <path d="M585 355 L525 360 L455 330 L360 310 L300 330 L185 320"/>
-    <path d="M525 360 L510 392"/>
-    <path d="M585 355 L540 430"/>
+  <!-- Beltway ring (I-495 / Capital Beltway) -->
+  <ellipse cx="680" cy="420" rx="240" ry="200"
+           fill="none" stroke="#6b5030" stroke-width="3" opacity="0.2"
+           stroke-dasharray="12 6" transform="rotate(-8 680 420)"/>
+
+  <!-- Road network connecting regions -->
+  <g stroke="#6b5030" stroke-width="3" opacity="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Ashburn to Reston -->
+    <path d="M165 340 C220 330, 260 310, 340 300"/>
+    <!-- Reston to Tysons -->
+    <path d="M365 300 C410 290, 450 280, 530 285"/>
+    <!-- Tysons to Arlington -->
+    <path d="M555 290 C600 310, 640 340, 690 380"/>
+    <!-- Arlington to DC (crossing Potomac) -->
+    <path d="M715 390 C750 390, 800 370, 935 310"/>
+    <!-- Herndon spur -->
+    <path d="M260 310 L290 380"/>
+    <!-- Pentagon spur -->
+    <path d="M700 400 L680 490"/>
+    <!-- Alexandria spur -->
+    <path d="M800 570 L750 560"/>
   </g>
 
+  <!-- Subtle terrain shading - western hills -->
+  <g opacity="0.08">
+    <ellipse cx="120" cy="300" rx="100" ry="140" fill="#6b5030"/>
+    <ellipse cx="250" cy="450" rx="80" ry="100" fill="#6b5030"/>
+  </g>
+
+  <!-- Region markers on the SVG (decorative only, interactive ones are overlaid) -->
   <g filter="url(#softGlow)">
-    <circle cx="185" cy="320" r="18" fill="#3a2a12" opacity="0.85"/>
-    <circle cx="185" cy="320" r="10" fill="#f2e6c9"/>
+    <!-- Ashburn -->
+    <circle cx="150" cy="340" r="16" fill="#3a2a12" opacity="0.8"/>
+    <circle cx="150" cy="340" r="9" fill="#f2e6c9"/>
 
-    <circle cx="300" cy="330" r="14" fill="#3a2a12" opacity="0.8"/>
-    <circle cx="300" cy="330" r="8" fill="#f2e6c9"/>
+    <!-- Reston -->
+    <circle cx="345" cy="298" r="14" fill="#3a2a12" opacity="0.75"/>
+    <circle cx="345" cy="298" r="8" fill="#f2e6c9"/>
 
-    <circle cx="360" cy="310" r="14" fill="#3a2a12" opacity="0.8"/>
-    <circle cx="360" cy="310" r="8" fill="#f2e6c9"/>
+    <!-- Herndon (minor) -->
+    <circle cx="290" cy="385" r="10" fill="#3a2a12" opacity="0.6"/>
+    <circle cx="290" cy="385" r="6" fill="#f2e6c9"/>
 
-    <circle cx="455" cy="330" r="14" fill="#3a2a12" opacity="0.8"/>
-    <circle cx="455" cy="330" r="8" fill="#f2e6c9"/>
+    <!-- Tysons -->
+    <circle cx="540" cy="285" r="14" fill="#3a2a12" opacity="0.75"/>
+    <circle cx="540" cy="285" r="8" fill="#f2e6c9"/>
 
-    <circle cx="525" cy="360" r="14" fill="#3a2a12" opacity="0.8"/>
-    <circle cx="525" cy="360" r="8" fill="#f2e6c9"/>
+    <!-- Arlington -->
+    <circle cx="700" cy="385" r="15" fill="#3a2a12" opacity="0.8"/>
+    <circle cx="700" cy="385" r="8" fill="#f2e6c9"/>
 
-    <circle cx="510" cy="392" r="12" fill="#3a2a12" opacity="0.8"/>
-    <circle cx="510" cy="392" r="7" fill="#f2e6c9"/>
+    <!-- Pentagon (minor) -->
+    <circle cx="680" cy="495" r="10" fill="#3a2a12" opacity="0.6"/>
+    <circle cx="680" cy="495" r="6" fill="#f2e6c9"/>
 
-    <circle cx="585" cy="355" r="16" fill="#3a2a12" opacity="0.85"/>
-    <circle cx="585" cy="355" r="9" fill="#f2e6c9"/>
+    <!-- The Citadel / DC (east of Potomac) -->
+    <circle cx="940" cy="300" r="18" fill="#3a2a12" opacity="0.85"/>
+    <circle cx="940" cy="300" r="10" fill="#f2e6c9"/>
 
-    <circle cx="540" cy="430" r="12" fill="#3a2a12" opacity="0.8"/>
-    <circle cx="540" cy="430" r="7" fill="#f2e6c9"/>
+    <!-- Alexandria (minor, east of Potomac) -->
+    <circle cx="745" cy="560" r="10" fill="#3a2a12" opacity="0.6"/>
+    <circle cx="745" cy="560" r="6" fill="#f2e6c9"/>
   </g>
 
-  <g font-family="serif" font-size="20" fill="#2a1c0b" opacity="0.85">
-    <text x="120" y="290">Ashburn Data Dominion</text>
-    <text x="260" y="370">Herndon Gate</text>
-    <text x="330" y="285">Reston Node</text>
-    <text x="420" y="300">Tysons Spires</text>
-    <text x="495" y="345">Arlington Nexus</text>
-    <text x="460" y="430">Pentagon Bastion</text>
-    <text x="590" y="335">The Citadel (D.C.)</text>
-    <text x="520" y="465">Alexandria Archives</text>
-    <text x="740" y="470" transform="rotate(-72 740 470)">The Potomac Divide</text>
+  <!-- Region labels -->
+  <g font-family="serif" fill="#2a1c0b">
+    <text x="150" y="310" text-anchor="middle" font-size="17" opacity="0.7">Ashburn</text>
+    <text x="150" y="325" text-anchor="middle" font-size="12" opacity="0.45">Data Dominion</text>
+
+    <text x="345" y="268" text-anchor="middle" font-size="17" opacity="0.7">Reston</text>
+    <text x="345" y="283" text-anchor="middle" font-size="12" opacity="0.45">Node</text>
+
+    <text x="290" y="415" text-anchor="middle" font-size="13" opacity="0.45">Herndon Gate</text>
+
+    <text x="540" y="255" text-anchor="middle" font-size="17" opacity="0.7">Tysons</text>
+    <text x="540" y="270" text-anchor="middle" font-size="12" opacity="0.45">Spires</text>
+
+    <text x="700" y="355" text-anchor="middle" font-size="17" opacity="0.7">Arlington</text>
+    <text x="700" y="370" text-anchor="middle" font-size="12" opacity="0.45">Nexus</text>
+
+    <text x="680" y="525" text-anchor="middle" font-size="13" opacity="0.45">Pentagon Bastion</text>
+
+    <text x="940" y="270" text-anchor="middle" font-size="19" opacity="0.75">The Citadel</text>
+    <text x="940" y="288" text-anchor="middle" font-size="13" opacity="0.5">(Washington, D.C.)</text>
+
+    <text x="745" y="590" text-anchor="middle" font-size="13" opacity="0.45">Alexandria Archives</text>
+
+    <!-- Potomac label along the river -->
+    <text font-size="16" opacity="0.35" letter-spacing="4">
+      <textPath href="#potomac-label-path">The Potomac Divide</textPath>
+    </text>
   </g>
 
-  <text x="60" y="90" font-family="serif" font-size="44" fill="#2a1c0b" opacity="0.85">
+  <!-- Hidden path for Potomac label to follow -->
+  <path id="potomac-label-path"
+        d="M850 120 C840 200, 860 260, 845 330 C830 400, 850 450, 835 520"
+        fill="none" stroke="none"/>
+
+  <!-- Title block -->
+  <text x="55" y="82" font-family="serif" font-size="40" fill="#2a1c0b" opacity="0.85" letter-spacing="1">
     The Beltway Realms
   </text>
-  <text x="62" y="120" font-family="serif" font-size="20" fill="#2a1c0b" opacity="0.65">
+  <text x="57" y="110" font-family="serif" font-size="16" fill="#2a1c0b" opacity="0.55">
     A parchment chart of Northern Virginia &amp; the Citadel of Washington
   </text>
-</svg>
 
+  <!-- Scale indicator -->
+  <g transform="translate(55, 720)" opacity="0.3">
+    <line x1="0" y1="0" x2="100" y2="0" stroke="#3a2a12" stroke-width="2"/>
+    <line x1="0" y1="-4" x2="0" y2="4" stroke="#3a2a12" stroke-width="1.5"/>
+    <line x1="100" y1="-4" x2="100" y2="4" stroke="#3a2a12" stroke-width="1.5"/>
+    <text x="50" y="14" text-anchor="middle" font-family="serif" font-size="10" fill="#3a2a12">~10 leagues</text>
+  </g>
+</svg>
