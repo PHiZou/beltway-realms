@@ -340,6 +340,34 @@
   overflow-x: visible;
 }
 
+/* Encounter hand: wrap cards so all are visible in narrow panel */
+.br-encounter-hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  overflow-x: visible;
+}
+
+.br-encounter-hand .br-card-slot {
+  flex: 1 1 9rem;
+  min-width: 9rem;
+  max-width: 11rem;
+}
+
+.br-encounter-hand .br-card-slot .br-card {
+  min-width: 0;
+  max-width: none;
+  width: 100%;
+}
+
+.br-encounter-hand .br-card-body {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.35;
+}
+
 .br-card-wrapper { position: relative; }
 
 .br-card-wrapper.is-spent .br-card { opacity: 0.5; }

@@ -295,7 +295,7 @@ export function EncounterHand({ quest }: EncounterHandProps) {
 
       <span className="br-dice-label">Hand of cards</span>
 
-      <div className="br-card-row">
+      <div className="br-encounter-hand">
         {hand.map((card) => {
           const played = isCardPlayed(card.id)
           const focused = isCardFocused(card.id)
